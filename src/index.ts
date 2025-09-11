@@ -2,7 +2,7 @@
 import winston from "winston";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import * as fs from "fs";
 import * as path from "path";
 import {
@@ -255,6 +255,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request, extra) => {
         tc.expectedResults.join("\n"),
       ];
     });
+    // Ensure headers are present
 
     try {
       const safeEndpoint = (endpoint as string)
@@ -266,10 +267,62 @@ server.setRequestHandler(CallToolRequestSchema, async (request, extra) => {
         fs.mkdirSync(outDir, { recursive: true });
       }
       const xlsxPath = path.join(outDir, fname);
-      const ws = XLSX.utils.aoa_to_sheet(rows);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "TestCases");
-      XLSX.writeFile(wb, xlsxPath);
+
+      // ExcelJS logic for Excel export with styled headers
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("TestCases");
+
+      // Add header with styling
+      worksheet.addRow([
+        "Sl no",
+        "Test Name",
+        "Pre-Condition",
+        "Steps",
+        "Expected Result",
+      ]);
+      // Style header row: bold & gold background
+      worksheet.getRow(1).eachCell((cell) => {
+        cell.font = { bold: true };
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FFD700" }, // Gold
+        };
+        cell.alignment = { vertical: "middle", horizontal: "center", wrapText: true };
+      });
+
+      // Add test case rows
+      for (let i = 0; i < rows.length; ++i) {
+        worksheet.addRow(rows[i]);
+      }
+
+      // Auto-fit columns
+      const colCount = worksheet.columnCount;
+      for (let idx = 1; idx <= colCount; idx++) {
+        const column = worksheet.getColumn(idx);
+        let maxLength = 10;
+        column.eachCell({ includeEmpty: true }, (cell) => {
+          maxLength = Math.max(
+            maxLength,
+            cell.value ? String(cell.value).length : 0
+          );
+        });
+        column.width = maxLength + 2;
+      }
+
+      // Add borders to all cells
+      worksheet.eachRow({ includeEmpty: true }, (row) => {
+        row.eachCell({ includeEmpty: true }, (cell) => {
+          cell.border = {
+            top:    { style: "thin" },
+            left:   { style: "thin" },
+            bottom: { style: "thin" },
+            right:  { style: "thin" },
+          };
+        });
+      });
+
+      await workbook.xlsx.writeFile(xlsxPath);
 
       logger.info(`[Step6] Test plan saved to ${xlsxPath}`);
 
