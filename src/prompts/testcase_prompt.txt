@@ -1,0 +1,84 @@
+Guidelines:
+** Include all the positive, negative, boundary value analysis
+** Test case should be in below format:
+Ex :  Tests for create user end point - 
+1.  Test Case Name - Verify user creation is successful
+    Steps: 
+    Step1: Make POST call to create a new user - https://api.example.com/v1/users
+        Payload - {
+            "username": "abc",
+            "email": "user@example.com",
+            "password": "pass123"
+        }
+    Expected Results:
+        1. Response Status Code should be 201
+        2. Response schema should be like below,
+        {
+            "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "username": "abc",
+            "email": "user@example.com"
+        }
+        3. Verify that username and email matches with user payload
+        4. Unique ID should be returned
+
+2.  Test Case Name - User creation should fail if username field length is less than 3 characters
+    Steps: 
+    Step1: Make POST call to create a new user - https://api.example.com/v1/users
+        Payload - {
+            "username": "ab",
+            "email": "user@example.com",
+            "password": "pass123"
+        }
+    Expected Results:
+        1. Status Code should be 400
+        2. Response schema should be like below,
+        {
+            "code": "VALIDATION_ERROR",
+            "message": "One or more input fields are invalid.",
+            "details": [
+                {
+                    "field": "username",
+                    "issue": "Username must be between 3 and 20 characters long.",
+                    "value": "ab",
+                    "code": "USERNAME_LENGTH_INVALID"
+                }
+            ]
+        }
+
+3.  Test Case Name - User creation should fail if username field length is more than 20 characters
+    Steps: 
+    Step1: Make POST call to create a new user - https://api.example.com/v1/users
+        Payload - {
+            "username": "abcdeabcdeabcdeabcdeabcde",
+            "email": "user@example.com",
+            "password": "pass123"
+        }
+    Expected Results:
+        1. Status Code should be 400
+        2. Response schema should be like below,
+        {
+            "code": "VALIDATION_ERROR",
+            "message": "One or more input fields are invalid.",
+            "details": [
+                {
+                    "field": "username",
+                    "issue": "Username must be between 3 and 20 characters long.",
+                    "value": "abcdeabcdeabcdeabcdeabcde",
+                    "code": "USERNAME_LENGTH_INVALID"
+                }
+            ]
+        }
+
+--- 
+AFTER reviewing the guidelines above, generate the FULL test plan for the selected endpoint in JSON format. Your response should be in a JSON array with each test case as an object like this:
+
+[
+  {
+    "name": "Test Case Name",
+    "preCondition": "Any pre-conditions",
+    "steps": ["Step 1", "Step 2", ...],
+    "expectedResults": ["Expected Result 1", "Expected Result 2", ...]
+  }
+]
+
+Do not include extra commentary or lines before/after the JSON object.
