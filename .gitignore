@@ -1,6 +1,2 @@
 node_modules/
 build/
-*.log
-.env*
-generated/
-configs/config.json
