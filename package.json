@@ -1,0 +1,33 @@
+{
+  "name": "ai-testcase-designer-mcp",
+  "version": "0.1.0",
+  "description": "An MCP server that generates comprehensive API test plans (positive, negative, edge cases) from endpoint metadata.",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "AI Testcase Designer MCP": "./build/index.js"
+  },
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
+    "prepare": "npm run build",
+    "watch": "tsc --watch",
+    "inspector": "npx @modelcontextprotocol/inspector build/index.js",
+    "dev": "nodemon --watch build --exec \"node build/index.js\""
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "0.6.0",
+    "@types/winston": "^2.4.4",
+    "dotenv": "^17.2.2",
+    "winston": "^3.17.0",
+    "xlsx": "^0.18.5",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "nodemon": "^3.1.10",
+    "typescript": "^5.3.3"
+  }
+}
