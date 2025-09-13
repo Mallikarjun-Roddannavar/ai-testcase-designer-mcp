@@ -55,8 +55,6 @@ Here’s the MCP generating test cases and exporting to Excel:
 
 ![AI Testcase Designer Demo](./assets/demo.gif)
 
-📊 [Download Sample Excel Test Plan](./assets/generated_tests_get_https___api_example_com_v1_users__userId__1757765178012.xlsx)
-
 ### 🔍 Excel Preview
 Below is a quick preview of the generated test cases:
 
