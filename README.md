@@ -5,6 +5,7 @@ An **MCP server** that generates comprehensive **API test plans** (positive, neg
 This is a TypeScript-based MCP server for QA engineers. It demonstrates core Model Context Protocol concepts by providing:
 
 - AI-powered tool for generating exhaustive test case plans from API endpoints and payloads
+- Ability to parse Swagger/OpenAPI specifications to auto-generate test cases
 - Prompt-driven LLM integration for quality and coverage
 - Extensible structure for future automation tooling
 
@@ -12,14 +13,25 @@ This is a TypeScript-based MCP server for QA engineers. It demonstrates core Mod
 
 - 🔌 **MCP-compliant server** (`stdio` transport).  
 - 📝 Tool: `generate_tests_excel`  
-  - Input: endpoint, HTTP method, payload, schema, extra context.  
-  - Output: Styled 📊 **Excel test plan** with columns:  
-    *Sl no, Test Name, Pre-Condition, Steps, Expected Result*.  
+  - Input: endpoint, HTTP method, payload, schema, extra context. 
+  - **Input options**:
+    - **Direct endpoint details**: endpoint, HTTP method, payload, and schema
+    - **Swagger/OpenAPI spec**: provide spec JSON/YAML, auto-extracts endpoints + schemas 
+  - **OutputPut**: 📊 **Excel test plan** with columns: *Sl no, Test Name, Pre-Condition, Steps, Expected Result*.  
 - 🧠 **Prompt-driven test generation** with configurable LLM (Groq, OpenAI, Anthropic).  
 - 📜 Detailed logging with **Winston**. 
 
-## 📂 Project Structure
+## 🏗️ Architecture
 
+```mermaid
+flowchart TD
+    A[Claude / MCP Client] -->|Run Tool| B[MCP Server]
+    B -->|Prompt| C[LLM API]
+    C -->|Test Cases JSON| B
+    B -->|Excel Export| D[(Test Plan .xlsx)]
+    B -->|Logs| E[Server Log File]
+```
+## 📂 Project Structure
 
 ```plaintext
 ai-testcase-designer-mcp/
@@ -36,6 +48,19 @@ ai-testcase-designer-mcp/
 └── .gitignore
 ```
 ---
+
+## 🎥 Demo
+
+Here’s the MCP generating test cases and exporting to Excel:
+
+![AI Testcase Designer Demo](./assets/demo.gif)
+
+📊 [Download Sample Excel Test Plan](./assets/generated_tests_get_https___api_example_com_v1_users__userId__1757765178012.xlsx)
+
+### 🔍 Excel Preview
+Below is a quick preview of the generated test cases:
+
+![Excel Preview](./assets/excel_preview.png)
 
 ## Development
 
@@ -58,28 +83,48 @@ npm run watch
 
 To use with Claude Desktop or any MCP-compatible client, add the server config:
 
+Ex: In Claude Desktop config - 
 On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`  
 On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
-    "AI Testcase Designer MCP": {
-      "command": "C:/path/to/ai-testcase-designer-mcp/build/index.js"
+    "ai-testcase-designer-mcp": {
+      "disabled": false,
+      "timeout": 60,
+      "command": "node",
+      "args": [
+        "c:/WCC/Auto_WS/ai-testcase-designer-mcp/build/index.js"
+      ],
+      "transportType": "stdio"
     }
   }
 }
 ```
 
-### Debugging
+## 🔑 API Key & Work Directory Setup
 
-Since MCP servers communicate over stdio, debugging can be challenging. We recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), which is available as a package script:
+To use the AI Testcase Designer MCP.
 
-```bash
-npm run inspector
+1. Get your Groq API key from here for free: [https://console.groq.com/keys](https://console.groq.com/keys)
+2. A working directory (WORK_DIR) where generated Excel test plans and server logs will be saved.
+
+Update your `config.json` file like this:
+
+```json
+{
+  "MODEL_API_KEY": "gsk_7Ma3Fabcd <your-api-key-here>",
+  "WORK_DIR": "C:/Auto_WS/ai-testcase-designer-mcp"
+}
 ```
+### How to Use
 
-The Inspector will provide a URL to access debugging tools in your browser.
+1. 🖥️ Open Claude Desktop (or any MCP-compatible client).  
+2. 📂 **Download Sample Chat Message**: [sample_chat_message.txt](./assets/sample_chat_message.txt) and copy its content.  
+3. ✉️ Paste the content into the chat and send the message: the AI will generate detailed test cases in Excel format.  
+4. 💾 Generated Excel files and server logs are saved in your `WORK_DIR` folder.  
+
 
 ## ▶️ Example Request
 
@@ -112,20 +157,19 @@ Files are written to: ./workdir/generated/
 
 ---
 
-## 🏗️ Architecture
-
-```mermaid
-flowchart TD
-    A[Claude / MCP Client] -->|Run Tool| B[MCP Server]
-    B -->|Prompt| C[LLM API]
-    C -->|Test Cases JSON| B
-    B -->|Excel Export| D[(Test Plan .xlsx)]
-    B -->|Logs| E[Server Log File]
-```
-
 ### Sample Log Output
 
 ```log
 2025-09-13T10:22:11 [info]: [Step1] Incoming request: endpoint=/v1/users, method=POST
 2025-09-13T10:22:11 [info]: [Step2] Building LLM prompt...
 2025-09-13T10:22:13 [info]: [Step5] Converting LLM JSON to Excel rows (15 test cases)
+```
+### Debugging
+
+Since MCP servers communicate over stdio, debugging can be challenging. We recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), which is available as a package script:
+
+```bash
+npm run inspector
+```
+
+The Inspector will provide a URL to access debugging tools in your browser.
