@@ -93,7 +93,7 @@ On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
       "timeout": 60,
       "command": "node",
       "args": [
-        "c:/WCC/Auto_WS/ai-testcase-designer-mcp/build/index.js"
+        "c:/Auto_WS/ai-testcase-designer-mcp/build/index.js"
       ],
       "transportType": "stdio"
     }
