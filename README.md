@@ -169,5 +169,10 @@ Since MCP servers communicate over stdio, debugging can be challenging. We recom
 ```bash
 npm run inspector
 ```
+## License
+
+This project is licensed under the MIT License.  
+See the [LICENSE](LICENSE) file for details.
+```
 
 The Inspector will provide a URL to access debugging tools in your browser.
