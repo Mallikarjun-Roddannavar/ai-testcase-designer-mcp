@@ -2,8 +2,26 @@
   "name": "ai-testcase-designer-mcp",
   "version": "0.1.0",
   "description": "An MCP server that generates comprehensive API test plans (positive, negative, edge cases) from endpoint metadata.",
+  "author": "Mallikarjun Roddannavar",
+  "license": "MIT",
   "private": true,
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mallikarjun-Roddannavar/ai-testcase-designer-mcp.git"
+  },
+  "homepage": "https://github.com/Mallikarjun-Roddannavar/ai-testcase-designer-mcp",
+  "keywords": [
+    "AI",
+    "testcase",
+    "LLM",
+    "MCP",
+    "automation",
+    "OpenAPI",
+    "typescript",
+    "api-testing",
+    "excel"
+  ],
   "bin": {
     "AI Testcase Designer MCP": "./build/index.js"
   },
