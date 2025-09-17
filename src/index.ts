@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import winston from "winston";
+import logger from "./logger.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import ExcelJS from "exceljs";
+import { generateTestPlanExcel } from "./excel.js";
 import * as fs from "fs";
 import * as path from "path";
 import {
@@ -17,22 +17,6 @@ if (!fs.existsSync(outDir)) {
 }
 const serverLogPath = path.join(outDir, "server.log");
 
-// Winston logger setup
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.printf(
-      (info) => `${info.timestamp} [${info.level}]: ${String(info.message)}`
-    )
-  ),
-  transports: [
-    new winston.transports.File({
-      filename: serverLogPath,
-      level: "info",
-    }),
-  ],
-});
 logger.info("---------------- Starting Server ----------------");
 const MODEL_API_URL =
   process.env.MODEL_API_URL ||
@@ -258,71 +242,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request, extra) => {
     // Ensure headers are present
 
     try {
-      const safeEndpoint = (endpoint as string)
-        .replace(/[^a-zA-Z0-9]/g, "_")
-        .slice(0, 60);
-      const safeMethod = String(method).toLowerCase();
-      const fname = `generated_tests_${safeMethod}_${safeEndpoint}_${Date.now()}.xlsx`;
-      if (!fs.existsSync(outDir)) {
-        fs.mkdirSync(outDir, { recursive: true });
-      }
-      const xlsxPath = path.join(outDir, fname);
-
-      // ExcelJS logic for Excel export with styled headers
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet("TestCases");
-
-      // Add header with styling
-      worksheet.addRow([
-        "Sl no",
-        "Test Name",
-        "Pre-Condition",
-        "Steps",
-        "Expected Result",
-      ]);
-      // Style header row: bold & gold background
-      worksheet.getRow(1).eachCell((cell) => {
-        cell.font = { bold: true };
-        cell.fill = {
-          type: "pattern",
-          pattern: "solid",
-          fgColor: { argb: "FFD700" }, // Gold
-        };
-        cell.alignment = { vertical: "middle", horizontal: "center", wrapText: true };
-      });
-
-      // Add test case rows
-      for (let i = 0; i < rows.length; ++i) {
-        worksheet.addRow(rows[i]);
-      }
-
-      // Auto-fit columns
-      const colCount = worksheet.columnCount;
-      for (let idx = 1; idx <= colCount; idx++) {
-        const column = worksheet.getColumn(idx);
-        let maxLength = 10;
-        column.eachCell({ includeEmpty: true }, (cell) => {
-          maxLength = Math.max(
-            maxLength,
-            cell.value ? String(cell.value).length : 0
-          );
-        });
-        column.width = maxLength + 2;
-      }
-
-      // Add borders to all cells
-      worksheet.eachRow({ includeEmpty: true }, (row) => {
-        row.eachCell({ includeEmpty: true }, (cell) => {
-          cell.border = {
-            top:    { style: "thin" },
-            left:   { style: "thin" },
-            bottom: { style: "thin" },
-            right:  { style: "thin" },
-          };
-        });
-      });
-
-      await workbook.xlsx.writeFile(xlsxPath);
+      // Excel file export using modular handler
+      const xlsxPath = await generateTestPlanExcel(
+        rows,
+        outDir,
+        String(endpoint),
+        String(method)
+      );
 
       logger.info(`[Step6] Test plan saved to ${xlsxPath}`);
 
