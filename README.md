@@ -88,29 +88,50 @@ For development with auto-rebuild:
 npm run watch
 ```
 
-## ⚙️ Installation (Claude Desktop / MCP Client)
+## ⚙️ Installation
 
-To use with Claude Desktop or any MCP-compatible client, add the server config:
+Follow these steps to set up the AI Testcase Designer MCP server:
 
-Ex: In Claude Desktop config - 
-On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`  
-On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+1. **Clone the repository**
+    ```bash
+    git clone https://github.com/yourusername/ai-testcase-designer-mcp.git
+    cd ai-testcase-designer-mcp
+    ```
 
-```json
-{
-  "mcpServers": {
-    "ai-testcase-designer-mcp": {
-      "disabled": false,
-      "timeout": 60,
-      "command": "node",
-      "args": [
-        "c:/Auto_WS/ai-testcase-designer-mcp/build/index.js"
-      ],
-      "transportType": "stdio"
+2. **Install dependencies**
+    ```bash
+    npm install
+    ```
+
+3. **Build the server**
+    ```bash
+    npm run build
+    ```
+
+4. **Configure the server in your MCP client**
+    - For Claude Desktop or any MCP-compatible client, add the following server configuration:
+
+      - **On MacOS:**  
+        `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+      - **On Windows:**  
+        `%APPDATA%/Claude/claude_desktop_config.json`
+
+    ```json
+    {
+      "mcpServers": {
+        "ai-testcase-designer-mcp": {
+          "disabled": false,
+          "timeout": 60,
+          "command": "node",
+          "args": [
+            "c:/Auto_WS/ai-testcase-designer-mcp/build/index.js"
+          ],
+          "transportType": "stdio"
+        }
+      }
     }
-  }
-}
-```
+    ```
 
 ## 🔑 API Key & Work Directory Setup
 
