@@ -35,18 +35,29 @@ flowchart TD
 
 ```plaintext
 ai-testcase-designer-mcp/
-├── build/                       # Compiled JS output
+├── build/                         # Compiled JavaScript output
+├── assets/                        # Demo gifs, images, and sample files
+│    ├── demo.gif
+│    ├── excel_preview.png
+│    └── sample_chat_message.txt
 ├── configs/
-│    └── config.json             # Server/tool config
+│    └── config.json               # Server/tool config
 ├── src/
-│    ├── index.ts                # Main server entrypoint
+│    ├── index.ts                  # Main server entry point (MCP interface & routing)
+│    ├── excel.ts                  # Excel file creation & writing logic (modular)
+│    ├── logger.ts                 # Winston logger configuration & log writing (modular)
 │    └── prompts/
-│         └── testcase_prompt.txt# Prompt template for LLM generation
+│         └── testcase_prompt.txt  # Prompt template for LLM-based test generation
 ├── package.json
 ├── tsconfig.json
 ├── README.md
 └── .gitignore
 ```
+
+- **src/excel.ts**: Handles all Excel (.xlsx) file creation and test plan export (modularized).
+- **src/logger.ts**: Provides modular logging functionality across the MCP server using Winston.
+- **src/prompts/**: Contains prompt templates for LLM-driven test generation.
+- **assets/**: Demo GIFs, Excel sample preview, and chat prompt examples.
 ---
 
 ## 🎥 Demo
