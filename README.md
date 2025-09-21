@@ -90,7 +90,7 @@ npm run watch
 
 ## ⚙️ Installation
 
-Follow these steps to set up the AI Testcase Designer MCP server:
+Follow these steps to set up the AI Testcase Designer MCP server locally:
 
 1. **Clone the repository**
     ```bash
@@ -109,7 +109,10 @@ Follow these steps to set up the AI Testcase Designer MCP server:
     ```
 
 4. **Configure the server in your MCP client**
-    - For Claude Desktop or any MCP-compatible client, add the following server configuration:
+
+    #### a. Claude Desktop or any MCP-compatible client
+
+    - Add the following server configuration:
 
       - **On MacOS:**  
         `~/Library/Application Support/Claude/claude_desktop_config.json`
@@ -132,6 +135,45 @@ Follow these steps to set up the AI Testcase Designer MCP server:
       }
     }
     ```
+
+    #### b. Cline (VS Code Extension)
+    <details>
+    <summary><strong>Setup in VS Code (Cline) — Click to expand</strong></summary>
+
+    <br>
+
+    You can also use the AI Testcase Designer MCP server with [Cline](https://cline.bot), the Model Context Protocol VS Code extension.
+
+    **Quick Start:**  
+    1. **Install [Cline from the VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev).**  
+    2. **Open the Cline sidebar** (from the VS Code activity bar).  
+    3. **Go to the "MCP Servers" section and click "Add New MCP Server".**  
+    4. **Fill in the server details:**  
+        ```json
+        {
+          "mcpServers": {
+            "ai-testcase-designer-mcp": {
+              "disabled": false,
+              "timeout": 60,
+              "command": "node",
+              "args": [
+                "c:/Auto_WS/ai-testcase-designer-mcp/build/index.js"
+              ],
+              "transportType": "stdio"
+            }
+          }
+        }
+        ```
+    5. **Test the connection and save.**
+
+    For a visual step-by-step guide, see below:
+
+    ![Cline MCP Server Add Steps](./assets/ClineSetUp_Steps.png)
+
+    For detailed Cline guidance, see the official docs:  
+    [cline.bot/getting-started/installing-cline#vs-code-marketplace%3A-step-by-step-setup](https://docs.cline.bot/getting-started/installing-cline#vs-code-marketplace%3A-step-by-step-setup)
+
+    </details>
 
 ## 🔑 API Key & Work Directory Setup
 
