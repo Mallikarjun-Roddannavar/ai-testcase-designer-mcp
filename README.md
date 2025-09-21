@@ -170,10 +170,12 @@ Follow these steps to set up the AI Testcase Designer MCP server locally:
 
     ![Cline MCP Server Add Steps](./assets/ClineSetUp_Steps.png)
 
+    ![Cline MCP Server Connection Success](./assets/ClineSetUp_MCP_Servers.png)
+
     For detailed Cline guidance, see the official docs:  
     [cline.bot/getting-started/installing-cline#vs-code-marketplace%3A-step-by-step-setup](https://docs.cline.bot/getting-started/installing-cline#vs-code-marketplace%3A-step-by-step-setup)
 
-    </details>
+</details>
 
 ## 🔑 API Key & Work Directory Setup
 
