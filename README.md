@@ -32,6 +32,7 @@ flowchart TD
     B -->|Logs| E[Server Log File]
 ```
 ## 📂 Project Structure
+<details>
 
 ```plaintext
 ai-testcase-designer-mcp/
@@ -59,6 +60,7 @@ ai-testcase-designer-mcp/
 - **src/prompts/**: Contains prompt templates for LLM-driven test generation.
 - **assets/**: Demo GIFs, Excel sample preview, and chat prompt examples.
 ---
+</details>
 
 ## 🎥 Demo
 
@@ -109,8 +111,8 @@ Follow these steps to set up the AI Testcase Designer MCP server locally:
     ```
 
 4. **Configure the server in your MCP client**
-
     #### a. Claude Desktop or any MCP-compatible client
+    <details>
 
     - Add the following server configuration:
 
@@ -135,13 +137,10 @@ Follow these steps to set up the AI Testcase Designer MCP server locally:
       }
     }
     ```
+    </details>
 
     #### b. Cline (VS Code Extension)
     <details>
-    <summary><strong>Setup in VS Code (Cline) — Click to expand</strong></summary>
-
-    <br>
-
     You can also use the AI Testcase Designer MCP server with [Cline](https://cline.bot), the Model Context Protocol VS Code extension.
 
     **Quick Start:**  
@@ -219,11 +218,15 @@ Update your `config.json` file like this:
 
 ## 📊 Example Excel Output
 
+<details>
+
 | Sl no | Test Name         | Pre-Condition | Steps                               | Expected Result           |
 |-------|-------------------|---------------|-------------------------------------|---------------------------|
 | 1     | Valid User Create | DB is empty   | Send POST with valid payload        | User created successfully |
 | 2     | Missing Email     | DB is empty   | Send POST with name only            | 400 validation error      |
 | 3     | Invalid Email     | DB is empty   | Send POST with invalid email format | 422 error message         |
+
+</details>
 
 ## 📂 Files Output
 
@@ -233,13 +236,18 @@ Files are written to: ./workdir/generated/
 
 ### Sample Log Output
 
+<details>
+
 ```log
 2025-09-13T10:22:11 [info]: [Step1] Incoming request: endpoint=/v1/users, method=POST
 2025-09-13T10:22:11 [info]: [Step2] Building LLM prompt...
 2025-09-13T10:22:13 [info]: [Step5] Converting LLM JSON to Excel rows (15 test cases)
 ```
+</details>
+
 ### Debugging
 
+<details>
 Since MCP servers communicate over stdio, debugging can be challenging. We recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), which is available as a package script:
 
 ```bash
@@ -247,6 +255,8 @@ npm run inspector
 ```
 
 The Inspector will provide a URL to access debugging tools in your browser.
+
+</details>
 
 ## License
 
