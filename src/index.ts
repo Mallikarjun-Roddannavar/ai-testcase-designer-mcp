@@ -2,8 +2,8 @@
 import logger from "./logger.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { generateTestPlanExcel } from "./excel.js";
-import { fetchTestCasesFromLLM } from "./llm.js";
+import { generateTestPlanExcel } from "./services/excelService.js";
+import { fetchTestCasesFromLLM } from "./services/llmService.js";
 import * as fs from "fs";
 import * as path from "path";
 import {
