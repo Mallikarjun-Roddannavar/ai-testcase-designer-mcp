@@ -3,6 +3,7 @@ import logger from "./logger.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { generateTestPlanExcel } from "./excel.js";
+import { fetchTestCasesFromLLM } from "./llm.js";
 import * as fs from "fs";
 import * as path from "path";
 import {
@@ -149,71 +150,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request, extra) => {
     // -----------------------------
     let llmJSON: any;
     try {
-      logger.info(`[Step4] Calling LLM API at ${MODEL_API_URL}`);
-      const response = await fetch(MODEL_API_URL, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${MODEL_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: MODEL_NAME,
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a helpful assistant that generates software test cases.",
-            },
-            { role: "user", content: prompt },
-          ],
-          temperature: MODEL_TEMPERATURE,
-          max_tokens: MODEL_MAX_TOKENS,
-        }),
+      llmJSON = await fetchTestCasesFromLLM({
+        prompt,
+        apiUrl: MODEL_API_URL,
+        apiKey: MODEL_API_KEY,
+        modelName: MODEL_NAME,
+        temperature: MODEL_TEMPERATURE,
+        maxTokens: MODEL_MAX_TOKENS,
+        logger
       });
-
-      const data = await response.json();
-      logger.info(`[Step4] LLM raw response: ${JSON.stringify(data)}`);
-      if (
-        !data.choices ||
-        !data.choices[0] ||
-        !data.choices[0].message ||
-        !data.choices[0].message.content
-      ) {
-        logger.error(`[Step4] Bad response from LLM: ${JSON.stringify(data)}`);
-        throw new Error("Bad response from LLM: " + JSON.stringify(data));
-      }
-
-      const content = data.choices[0].message.content.trim();
-      // Use a multiline-safe regex to extract the full array
-      let match = content.match(/\[[\s\S]*\]/);
-      if (!match) {
-        logger.error(
-          `[Step4] No JSON array found in LLM response. Raw content below:\n-----BEGIN LLM CONTENT-----\n${content}\n-----END LLM CONTENT-----`
-        );
-        logger.error(
-          `[Step4] Full LLM raw API response object:\n${JSON.stringify(
-            data,
-            null,
-            2
-          )}`
-        );
-        throw new Error("No JSON array found in LLM response.");
-      }
-      try {
-        llmJSON = JSON.parse(match[0]);
-      } catch (parseErr: any) {
-        logger.error(
-          `[Step4] Failed to parse JSON from LLM response. Raw output: ${content}\n[Step4][DEBUG] match[0]:\n${
-            match[0]
-          }\n[Step4][DEBUG] Parse error:\n${
-            parseErr && parseErr.message ? parseErr.message : String(parseErr)
-          }`
-        );
-        throw new Error(
-          "Failed to parse JSON from LLM response: " +
-            (parseErr && parseErr.message ? parseErr.message : String(parseErr))
-        );
-      }
     } catch (error: any) {
       logger.error(
         `[Step4] Failed to generate test cases in JSON format from LLM: ${error.message}`
