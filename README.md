@@ -5,7 +5,6 @@ An **MCP server** that generates comprehensive **API test plans** (positive, neg
 This is a TypeScript-based MCP server for QA engineers. It demonstrates core Model Context Protocol concepts by providing:
 
 - AI-powered tool for generating exhaustive test case plans from API endpoints and payloads
-- Ability to parse Swagger/OpenAPI specifications to auto-generate test cases
 - Prompt-driven LLM integration for quality and coverage
 - Extensible structure for future automation tooling
 
@@ -13,10 +12,10 @@ This is a TypeScript-based MCP server for QA engineers. It demonstrates core Mod
 
 - 🔌 **MCP-compliant server** (`stdio` transport).  
 - 📝 Tool: `generate_tests_excel`  
-  - Input: endpoint, HTTP method, payload, schema, extra context. 
+  - Input: endpoint, HTTP method, payload, extra context. 
   - **Input options**:
-    - **Direct endpoint details**: endpoint, HTTP method, payload, and schema
-    - **Swagger/OpenAPI spec**: provide spec JSON/YAML, auto-extracts endpoints + schemas 
+    - **Direct endpoint details**: endpoint, HTTP method, payload
+    - Use extraContext to provide any additional testing notes or constraints
   - **OutputPut**: 📊 **Excel test plan** with columns: *Sl no, Test Name, Pre-Condition, Steps, Expected Result*.  
 - 🧠 **Prompt-driven test generation** with configurable LLM (Groq, OpenAI, Anthropic).  
 - 📜 Detailed logging with **Winston**. 

@@ -35,7 +35,7 @@ generation and Excel export.
 
 - The only exposed tool is `generate_tests_excel` (see `src/index.ts`).
   - Required params: `endpoint` (string), `method` (string)
-  - Optional: `payload` (object), `extraContext` (string), `payloadSchema` (stringified zod schema)
+  - Optional: `payload` (object), `extraContext` (string)
 - Tool output is an Excel file in `/generated`.
 - The LLM prompt is carefully engineered for test case structure and boundary coverage (see `src/index.ts` and `src/generate_tests/generateTest_llm.ts`).
 
@@ -43,7 +43,7 @@ generation and Excel export.
 
 - **Environment variables** (see `.env`):
   - `MODEL_API_KEY` (required)
-  - `MODEL_API_URL`, `MODEL_NAME`, `MODEL_TEMPERATURE`, `MODEL_MAX_TOKENS`, `OUTPUT_DIR`, `ALLOW_DYNAMIC_SCHEMA` (optional)
+  - `MODEL_API_URL`, `MODEL_NAME`, `MODEL_TEMPERATURE`, `MODEL_MAX_TOKENS`, `OUTPUT_DIR` (optional)
 - **TypeScript strict mode** is enforced (see `tsconfig.json`).
 - **No direct editing of build/**: Always edit TypeScript sources in `src/`.
 - **Excel output**: All test plans are written as `.xlsx` files using the `xlsx` library.

@@ -27,7 +27,6 @@ const MODEL_NAME = process.env.MODEL_NAME || "llama-3.3-70b-versatile";
 const MODEL_TEMPERATURE = Number(process.env.MODEL_TEMPERATURE ?? 0.1);
 const MODEL_MAX_TOKENS = Number(process.env.MODEL_MAX_TOKENS ?? 2000);
 
-const ALLOW_DYNAMIC_SCHEMA = process.env.ALLOW_DYNAMIC_SCHEMA === "true";
 
 if (!MODEL_API_KEY) {
   logger.error(
@@ -79,12 +78,6 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: "string",
               description:
                 "Any additional instructions/context for the test plan",
-              nullable: true,
-            },
-            payloadSchema: {
-              type: "string",
-              description:
-                "Optional stringified zod schema definition for validating the payload dynamically",
               nullable: true,
             },
           },
