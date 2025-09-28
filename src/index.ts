@@ -16,7 +16,6 @@ const outDir = path.resolve(WORK_DIR, "generated");
 if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir, { recursive: true });
 }
-const serverLogPath = path.join(outDir, "server.log");
 
 logger.info("---------------- Starting Server ----------------");
 const MODEL_API_URL =
