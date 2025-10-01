@@ -1,8 +1,8 @@
 # 🤖 AI Testcase Designer MCP
 
-An **MCP server** that generates comprehensive **API test plans** (positive, negative, and boundary/edge cases) directly from endpoint metadata—powered by **LLMs**.
+An **Model Context Protocol(MCP) server** that generates comprehensive **API test plans** (positive, negative, and boundary/edge cases) directly from endpoint metadata—powered by **LLMs**.
 
-This is a TypeScript-based MCP server for QA engineers. It demonstrates core Model Context Protocol concepts by providing:
+This is a TypeScript-based Model Context Protocol(MCP) server for QA engineers. It demonstrates core Model Context Protocol concepts by providing:
 
 - AI-powered tool for generating exhaustive test case plans from API endpoints and payloads
 - Prompt-driven LLM integration for quality and coverage
